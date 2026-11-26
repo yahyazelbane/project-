@@ -1,16 +1,50 @@
-# React + Vite
+# CampusFlow — Gestion des étudiants
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Application React + Vite avec authentification sécurisée par Supabase, tableau de bord, gestion des étudiants, recherche, filtre et export CSV.
 
-Currently, two official plugins are available:
+## 1. Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+## 2. Configurer Supabase
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Créez un projet sur https://supabase.com.
+2. Dans **Project Settings → API**, copiez l'URL du projet et la clé publique `anon` / `publishable`.
+3. Copiez `.env.example` vers `.env.local`.
+4. Remplissez les variables :
 
-## Expanding the Oxlint configuration
+```env
+VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+VITE_SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+5. Dans Supabase, ouvrez **SQL Editor** et exécutez le contenu de `supabase/schema.sql`.
+6. Dans **Authentication → Users**, créez votre utilisateur administrateur avec l'adresse e-mail et le mot de passe de votre choix.
+7. Désactivez l'inscription publique dans Authentication si vous souhaitez que seul l'administrateur que vous avez créé puisse se connecter.
+
+## 3. Déploiement Vercel
+
+- Importez le dépôt GitHub dans Vercel.
+- Dans **Project → Settings → Environment Variables**, ajoutez `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY`.
+- Redéployez le projet après avoir ajouté les variables.
+
+## Sécurité
+
+- Aucun mot de passe n'est codé en dur dans le frontend.
+- L'authentification est gérée par Supabase Auth.
+- La clé `service_role` ne doit JAMAIS être ajoutée à Vite, à GitHub ou à une variable `VITE_`.
+- Le SQL active RLS et limite les opérations aux utilisateurs authentifiés.
+- Pour un vrai système multi-rôle, ajoutez une table de rôles et des politiques RLS basées sur ces rôles.
+
+## Fonctionnalités
+
+- Connexion / déconnexion administrateur
+- Tableau de bord avec statistiques
+- Ajout, modification et suppression d'étudiants
+- Recherche par nom, prénom, e-mail et filière
+- Filtre par niveau
+- Export CSV
+- Interface responsive pour mobile et ordinateur
